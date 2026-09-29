@@ -4,7 +4,7 @@ import modelo.EmpleadoAdministrativo;
 import modelo.EmpleadoBase;
 import modelo.RepositorioEmpleados;
 import java.util.ArrayList;
-
+import modelo.EmpleadoComercial;
 /**
  * El "cerebro" del sistema: recibe lo que el usuario escribe en la ventana,
  * lo valida y decide qué hacer con los datos.
@@ -13,7 +13,8 @@ public class EmpleadoControlador {
 
     public static final String[] TIPOS_EMPLEADO = {
             "Operativo",
-            "Administrativo"
+            "Administrativo",
+            "Comercial"
     };
 
     private final RepositorioEmpleados repositorio;
@@ -98,6 +99,18 @@ public class EmpleadoControlador {
             return "La bonificación debe ser un número positivo.";
         }
 
+        if (tipo.equals("Comercial")) {
+            if (!esNumeroValido(bonificacion)) {
+                return "La comisión debe ser un número válido.";
+            }
+
+            double porcentaje = Double.parseDouble(bonificacion);
+
+            if (porcentaje > 50) {
+                return "La comisión no puede ser mayor al 50%.";
+            }
+        }
+
         return null;
     }
 
@@ -115,6 +128,17 @@ public class EmpleadoControlador {
                     nombre,
                     salarioBase,
                     bono
+            );
+        }
+
+        if (tipo.equals("Comercial")) {
+            double porcentaje = Double.parseDouble(bonificacion);
+
+            return new EmpleadoComercial(
+                    cedula,
+                    nombre,
+                    salarioBase,
+                    porcentaje
             );
         }
 

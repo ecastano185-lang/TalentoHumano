@@ -3,6 +3,7 @@ package vista;
 import controlador.EmpleadoControlador;
 import modelo.EmpleadoAdministrativo;
 import modelo.EmpleadoBase;
+import modelo.EmpleadoComercial;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -68,7 +69,7 @@ public class VentanaEmpleados extends JFrame {
         campos.add(new JLabel("Tipo de empleado:"));
         campos.add(cmbTipo);
 
-        campos.add(new JLabel("Bonificación (solo administrativos):"));
+        campos.add(new JLabel("Bonificación / Comision %:"));
         campos.add(txtBonificacion);
 
         txtBonificacion.setEnabled(false);
@@ -162,12 +163,13 @@ public class VentanaEmpleados extends JFrame {
 
     private void conectarEventos() {
         cmbTipo.addActionListener(e -> {
-            boolean esAdministrativo =
-                    tipoSeleccionado().equals("Administrativo");
+            boolean necesitaCampoAdicional =
+                    tipoSeleccionado().equals("Administrativo")
+                            || tipoSeleccionado().equals("Comercial");
 
-            txtBonificacion.setEnabled(esAdministrativo);
+            txtBonificacion.setEnabled(necesitaCampoAdicional);
 
-            if (!esAdministrativo) {
+            if (!necesitaCampoAdicional) {
                 txtBonificacion.setText("");
             }
         });
@@ -241,8 +243,22 @@ public class VentanaEmpleados extends JFrame {
                     (EmpleadoAdministrativo) empleado;
 
             txtBonificacion.setText(
-                    String.format("%.0f",
-                            administrativo.getBonificacion())
+                    String.format(
+                            "%.0f",
+                            administrativo.getBonificacion()
+                    )
+            );
+        }
+
+        if (empleado instanceof EmpleadoComercial) {
+            EmpleadoComercial comercial =
+                    (EmpleadoComercial) empleado;
+
+            txtBonificacion.setText(
+                    String.format(
+                            "%.0f",
+                            comercial.getPorcentajeComision()
+                    )
             );
         }
     }
