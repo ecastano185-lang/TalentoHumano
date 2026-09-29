@@ -32,7 +32,7 @@ public class EmpleadoBase {
             this.salarioBase = 0; // nunca aceptamos salarios negativos
         }
     }
-    // Métodos que las clases hijas podrán SOBRESCRIBIR (polimorfismo)
+    // Métodos que las clases hijas podrán SOBRESCRIBIR (polimorfimo)
     public double calcularSalarioTotal() {
         return salarioBase;
     }
